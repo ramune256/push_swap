@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:55:28 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 23:07:58 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/29 23:13:15 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void    error_exit(void)
 {
-    write(2, "ERROR\n", 6);
+    write(2, "Error\n", 6);
     exit(1);
 }
 
