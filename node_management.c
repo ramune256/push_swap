@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 15:40:55 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/29 22:53:16 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	add_node(t_stack *stack, int value)
 
 	new_node = ft_lstnew(value);
     if (!new_node)
-        exit(1);
+        error_exit();
     ft_lstadd_front(&(stack->top), new_node);
     stack->size++;
 }
@@ -29,7 +29,7 @@ int	del_node(t_stack *stack)
 	int		value;
 
     if (stack->size == 0)
-        exit(1);
+        return;
 	top_node = stack->top;
 	value = top_node->value;
     stack->top = top_node->next;
