@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 14:16:55 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:40:55 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ void	add_node(t_stack *stack, int value)
 {
     t_node *new_node;
 
-	new_node = (t_node *)malloc(sizeof(t_node));
+	new_node = ft_lstnew(value);
     if (!new_node)
         exit(1);
-    new_node->value = value;
-    new_node->next = stack->top;
-    stack->top = new_node;
+    ft_lstadd_front(&(stack->top), new_node);
     stack->size++;
 }
 
@@ -33,7 +31,7 @@ int	del_node(t_stack *stack)
     if (stack->size == 0)
         exit(1);
 	top_node = stack->top;
-	value = stack->top->value;
+	value = top_node->value;
     stack->top = top_node->next;
     free(top_node);
     stack->size--;
@@ -56,17 +54,13 @@ void swap(t_stack *stack)
 void rotate(t_stack *stack)
 {
     t_node  *old_top;
-    t_node  *tail;
 
     if (stack->size < 2)
         return;
     old_top = stack->top;
     stack->top = stack->top->next;
     old_top->next = NULL;
-    tail = stack->top;
-    while (tail && tail->next)
-        tail = tail->next;
-    tail->next = old_top;
+    ft_lstadd_back(&(stack->top), old_top);
 }
 
 void reverse_rotate(t_stack *stack)
@@ -76,13 +70,10 @@ void reverse_rotate(t_stack *stack)
 
     if (stack->size < 2)
         return;
-    tail = stack->top;
-    while (tail->next)
-    {
-        prev = tail;
-        tail = tail->next;
-    }
+    tail = ft_lstlast(stack->top);
+    prev = stack->top;
+    while (prev->next != tail)
+        prev = prev->next;
     prev->next = NULL;
-    tail->next = stack->top;
-    stack->top = tail;
+    ft_lstadd_front(&(stack->top), tail);
 }
