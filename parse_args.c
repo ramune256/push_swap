@@ -6,14 +6,18 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:55:28 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/30 13:27:30 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/30 14:04:01 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void    error_exit(void)
+void    error_exit(t_stack **stack_a, t_stack **stack_b)
 {
+    if (stack_a != NULL)
+        free_stack(*stack_a);
+    if (stack_b != NULL)
+        free_stack(*stack_b);
     write(2, "Error\n", 6);
     exit(1);
 }
@@ -45,7 +49,7 @@ void    add_numbers(t_stack **stack_a, char **nums)
 	}
 }
 
-void    parse_args(char **argv, t_stack **stack_a)
+void    parse_args(char **argv, t_stack **stack_a, t_stack **stack_b)
 {
     char    **nums;
 
@@ -53,17 +57,14 @@ void    parse_args(char **argv, t_stack **stack_a)
     {
         nums = ft_split(argv[1], ' ');
         if (!nums)
-        {
-            free_stack(*stack_a);
-            error_exit();
-        }
-        error_finder(nums);
+            error_exit(stack_a, stack_b);
+        error_finder(nums, stack_a, stack_b);
         add_numbers(stack_a, nums);
         free_2d_array(nums);
     }
     else
     {
-        error_finder(argv + 1);
+        error_finder((argv + 1), stack_a, stack_b);
         add_numbers(stack_a, (argv + 1));
     }
 }

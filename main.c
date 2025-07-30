@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:51:05 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 23:08:31 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/30 14:01:08 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@ int main(int argc, char **argv)
     if (argc < 2)
         exit(1);
 	stack_a = init_stack();
+    if (!stack_a)
+        error_exit(NULL, NULL);
 	stack_b = init_stack();
-    parse_args(argv, &stack_a);
+    if (!stack_b)
+        error_exit(&stack_a, NULL);
+    parse_args(argv, &stack_a, &stack_b);
 
     // // スタックの内容を確認するための出力（デバッグ用）
     // t_node *tmp = stack_a->top;

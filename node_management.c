@@ -6,19 +6,19 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 22:53:16 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:48:09 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	add_node(t_stack *stack, int value)
+void    add_node(t_stack *stack, int value)
 {
     t_node *new_node;
 
 	new_node = ft_lstnew(value);
     if (!new_node)
-        error_exit();
+        return (write(2, "Error\n", 6));
     ft_lstadd_front(&(stack->top), new_node);
     stack->size++;
 }

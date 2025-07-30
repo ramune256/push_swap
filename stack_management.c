@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:17:09 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 22:53:38 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:57:50 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_stack	*init_stack(void)
 
 	stack = (t_stack *)malloc(sizeof(t_stack));
     if (!stack)
-        error_exit();
+        return (NULL);
     stack->top = NULL;
     stack->size = 0;
     return (stack);
