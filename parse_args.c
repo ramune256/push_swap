@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:55:28 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 23:13:15 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:27:30 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,13 @@ void    parse_args(char **argv, t_stack **stack_a)
             free_stack(*stack_a);
             error_exit();
         }
+        error_finder(nums);
         add_numbers(stack_a, nums);
         free_2d_array(nums);
     }
     else
+    {
+        error_finder(argv + 1);
         add_numbers(stack_a, (argv + 1));
+    }
 }
