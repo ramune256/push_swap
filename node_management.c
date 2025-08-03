@@ -6,74 +6,74 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/30 13:48:09 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/03 17:05:05 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void    add_node(t_stack *stack, int value)
+void	add_node(t_stack *stack, int value)
 {
-    t_node *new_node;
+	t_node		*new_node;
 
 	new_node = ft_lstnew(value);
-    if (!new_node)
-        return (write(2, "Error\n", 6));
-    ft_lstadd_front(&(stack->top), new_node);
-    stack->size++;
+	if (!new_node)
+		return (write(2, "Error\n", 6));
+	ft_lstadd_front(&(stack->top), new_node);
+	stack->size++;
 }
 
 int	del_node(t_stack *stack)
 {
-    t_node	*top_node;
-	int		value;
+	t_node		*top_node;
+	int			value;
 
-    if (stack->size == 0)
-        return;
+	if (stack->size == 0)
+		return (0);
 	top_node = stack->top;
 	value = top_node->value;
-    stack->top = top_node->next;
-    free(top_node);
-    stack->size--;
-    return (value);
+	stack->top = top_node->next;
+	free(top_node);
+	stack->size--;
+	return (value);
 }
 
-void swap(t_stack *stack)
+void	swap(t_stack *stack)
 {
-    int first;
-    int second;
+	int			first;
+	int			second;
 
-    if (stack->size < 2)
-        return;
-    first = del_node(stack);
-    second = del_node(stack);
-    add_node(stack, first);
-    add_node(stack, second);
+	if (stack->size < 2)
+		return;
+	first = del_node(stack);
+	second = del_node(stack);
+	add_node(stack, first);
+	add_node(stack, second);
 }
 
-void rotate(t_stack *stack)
+void	rotate(t_stack *stack)
 {
-    t_node  *old_top;
+	t_node		*old_top;
 
-    if (stack->size < 2)
-        return;
-    old_top = stack->top;
-    stack->top = stack->top->next;
-    old_top->next = NULL;
-    ft_lstadd_back(&(stack->top), old_top);
+	if (stack->size < 2)
+		return;
+	old_top = stack->top;
+	stack->top = stack->top->next;
+	old_top->next = NULL;
+	ft_lstadd_back(&(stack->top), old_top);
 }
 
-void reverse_rotate(t_stack *stack)
+void	reverse_rotate(t_stack *stack)
 {
-    t_node *tail;
-    t_node *prev;
+	t_node		*tail;
+	t_node		*prev;
 
-    if (stack->size < 2)
-        return;
-    tail = ft_lstlast(stack->top);
-    prev = stack->top;
-    while (prev->next != tail)
-        prev = prev->next;
-    prev->next = NULL;
-    ft_lstadd_front(&(stack->top), tail);
+	if (stack->size < 2)
+		return;
+	tail = ft_lstlast(stack->top);
+	prev = stack->top;
+	while (prev->next != tail)
+		prev = prev->next;
+	prev->next = NULL;
+	ft_lstadd_front(&(stack->top), tail);
 }
