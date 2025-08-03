@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/07/29 13:59:34 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/03 16:45:22 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,13 @@ typedef struct s_stack {
     t_node	*top;
     int		size;
 } t_stack;
+
+typedef struct s_cost {
+    int idx_a;
+    int idx_b;
+    int cost_a;
+    int cost_b;
+    int total;
+} t_cost;
 
 #endif
