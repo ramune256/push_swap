@@ -6,65 +6,52 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/04 17:58:21 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:32:20 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_node	*node_at(t_stack *s, int idx)
+int	ft_abs(int n)
 {
-	t_node	*cur;
-
-	cur = s->top;
-	while (idx-- && cur)
-		cur = cur->next;
-	return (cur);
+	if (n == -2147483648)
+		return (2147483647);
+	if (n < 0)
+		return (-n);
+	return (n);
 }
 
-int	target_idx_b(t_stack *b, int value)
+int	value_of_node(int index, t_stack *stack)
 {
-	int		i;
-	t_node	*cur;
-	t_node	*next;
+	t_node	*current;
 
-	if (b->size < 2)
-		return (0);
-	i = 0;
-	cur = b->top;
-	while (i < b->size)
-	{
-		if (cur->next)
-			next = cur->next;
-		else
-			next = b->top;
-		if (cur->value >= value && value >= next->value)
-			return (i + 1);
-		cur = cur->next;
-		i++;
-	}
-	return (0);
+	current = stack->top;
+	while (index-- && current)
+		current = current->next;
+	return (current->value);
 }
 
-int	target_idx_a(t_stack *a, int value)
+int	find_insert_position(t_stack *stack, int to_insert, char stackname)
 {
 	int		i;
-	t_node	*cur;
+	t_node	*current;
 	t_node	*next;
 
-	if (a->size < 2)
-		return (0);
 	i = 0;
-	cur = a->top;
-	while (i < a->size)
+	current = stack->top;
+	while (i < stack->size)
 	{
-		if (cur->next)
-			next = cur->next;
+		if (current->next)
+			next = current->next;
 		else
-			next = a->top;
-		if (cur->value <= value && value <= next->value)
+			next = stack->top;
+		if (stackname == 'a' \
+			&& (current->value < to_insert) && (to_insert < next->value))
 			return (i + 1);
-		cur = cur->next;
+		if (stackname == 'b' \
+			&& (current->value > to_insert) && (to_insert > next->value))
+			return (i + 1);
+		current = next;
 		i++;
 	}
 	return (0);
@@ -106,7 +93,7 @@ t_cost	best_move_to_b(t_stack *a, t_stack *b)
 	while (i < a->size)
 	{
 		tmp.idx_a = i;
-		tmp.idx_b = target_idx_b(b, node_at(a, i)->value);
+		tmp.idx_b = find_insert_position(b, value_of_node(i, a), 'b');
 		get_rough_cost(a, b, &tmp);
 		get_better_way(&tmp);
 		if (tmp.total < best.total)
@@ -127,7 +114,7 @@ t_cost	best_move_to_a(t_stack *a, t_stack *b)
 	while (i < b->size)
 	{
 		tmp.idx_b = i;
-		tmp.idx_a = target_idx_a(a, node_at(b, i)->value);
+		tmp.idx_a = find_insert_position(a, value_of_node(i, b), 'a');
 		get_rough_cost(a, b, &tmp);
 		get_better_way(&tmp);
 		if (tmp.total < best.total)
@@ -139,36 +126,50 @@ t_cost	best_move_to_a(t_stack *a, t_stack *b)
 
 void	sort_three(t_stack *a)
 {
-	int	top;
-	int	mid;
-	int	bot;
+	int	first;
+	int	second;
+	int	third;
 
-	while (!(a->top->value < a->top->next->value \
-		&& a->top->next->value < a->top->next->next->value))
+	first = a->top->value;
+	second = a->top->next->value;
+	third = a->top->next->next->value;
+	if (first > second && first > third)
+		ra(a);
+	else if (second > first && second > third)
+		rra(a);
+	if (first > second)
+		sa(a);
+}
+
+void	rotate_a(t_stack *a, t_cost *move)
+{
+	while (move->cost_a > 0)
 	{
-		top = a->top->value;
-		mid = a->top->next->value;
-		bot = a->top->next->next->value;
-		if (top > mid && mid < bot && top < bot)
-			sa(a);
-		else if (top > mid && mid > bot)
-		{
-			sa(a);
-			rra(a);
-		}
-		else if (top > mid && mid < bot && top > bot)
-			ra(a);
-		else if (top < mid && mid > bot && top < bot)
-		{
-			sa(a);
-			ra(a);
-		}
-		else if (top < mid && mid > bot && top > bot)
-			rra(a);
+		ra(a);
+		move->cost_a--;
+	}
+	while (move->cost_a < 0)
+	{
+		rra(a);
+		move->cost_a++;
 	}
 }
 
-void	execute_move(t_stack *a, t_stack *b, t_cost *move)
+void	rotate_b(t_stack *b, t_cost *move)
+{
+	while (move->cost_b > 0)
+	{
+		rb(b);
+		move->cost_b--;
+	}
+	while (move->cost_b < 0)
+	{
+		rrb(b);
+		move->cost_b++;
+	}
+}
+
+void	rotate_stacks(t_stack *a, t_stack *b, t_cost *move)
 {
 	while (move->cost_a > 0 && move->cost_b > 0)
 	{
@@ -182,26 +183,8 @@ void	execute_move(t_stack *a, t_stack *b, t_cost *move)
 		move->cost_a++;
 		move->cost_b++;
 	}
-	while (move->cost_a > 0)
-	{
-		ra(a);
-		move->cost_a--;
-	}
-	while (move->cost_a < 0)
-	{
-		rra(a);
-		move->cost_a++;
-	}
-	while (move->cost_b > 0)
-	{
-		rb(b);
-		move->cost_b--;
-	}
-	while (move->cost_b < 0)
-	{
-		rrb(b);
-		move->cost_b++;
-	}
+	rotate_a(a, move);
+	rotate_b(b, move);
 }
 
 void	finalize_stack(t_stack *a)
@@ -257,19 +240,19 @@ void	turk_sort(t_stack *a, t_stack *b)
 	}
 	pb(a, b);
 	pb(a, b);
-	if (b->top->value < b->top->next->value)
+	if ((b->top->value) < (b->top->next->value))
 		sb(b);
 	while (a->size > 3)
 	{
 		move = best_move_to_b(a, b);
-		execute_move(a, b, &move);
+		rotate_stacks(a, b, &move);
 		pb(a, b);
 	}
 	sort_three(a);
 	while (b->size > 0)
 	{
 		move = best_move_to_a(a, b);
-		execute_move(a, b, &move);
+		rotate_stacks(a, b, &move);
 		pa(a, b);
 	}
 	finalize_stack(a);
