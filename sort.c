@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/04 21:32:20 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:49:01 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,15 @@ int	find_insert_position(t_stack *stack, int to_insert, char stackname)
 		else
 			next = stack->top;
 		if (stackname == 'a' \
-			&& (current->value < to_insert) && (to_insert < next->value))
+				&& (current->value < to_insert) && (to_insert < next->value))
 			return (i + 1);
 		if (stackname == 'b' \
-			&& (current->value > to_insert) && (to_insert > next->value))
+				&& (current->value > to_insert) && (to_insert > next->value))
 			return (i + 1);
 		current = next;
 		i++;
 	}
 	return (0);
-}
-
-void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp)
-{
-		if (tmp->idx_a <= a->size / 2)
-			tmp->cost_a = tmp->idx_a;
-		else
-			tmp->cost_a = tmp->idx_a - a->size;
-		if (tmp->idx_b <= b->size / 2)
-			tmp->cost_b = tmp->idx_b;
-		else
-			tmp->cost_b = tmp->idx_b - b->size;
 }
 
 void	get_better_way(t_cost *tmp)
@@ -80,6 +68,18 @@ void	get_better_way(t_cost *tmp)
 	}
 	else
 		tmp->total = ft_abs(tmp->cost_a) + ft_abs(tmp->cost_b);
+}
+
+void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp)
+{
+		if (tmp->idx_a <= a->size / 2)
+			tmp->cost_a = tmp->idx_a;
+		else
+			tmp->cost_a = tmp->idx_a - a->size;
+		if (tmp->idx_b <= b->size / 2)
+			tmp->cost_b = tmp->idx_b;
+		else
+			tmp->cost_b = tmp->idx_b - b->size;
 }
 
 t_cost	best_move_to_b(t_stack *a, t_stack *b)
@@ -139,6 +139,14 @@ void	sort_three(t_stack *a)
 		rra(a);
 	if (first > second)
 		sa(a);
+}
+
+void	a_piece_of_cake(t_stack *a)
+{
+	if (a->size == 2 && a->top->value > a->top->next->value)
+		sa(a);
+	else if (a->size == 3)
+		sort_three(a);
 }
 
 void	rotate_a(t_stack *a, t_cost *move)
@@ -219,14 +227,6 @@ void	finalize_stack(t_stack *a)
 		while (min_idx--)
 			rra(a);
 	}
-}
-
-void	a_piece_of_cake(t_stack *a)
-{
-	if (a->size == 2 && a->top->value > a->top->next->value)
-		sa(a);
-	else if (a->size == 3)
-		sort_three(a);
 }
 
 void	turk_sort(t_stack *a, t_stack *b)
