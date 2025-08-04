@@ -6,18 +6,18 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:55:28 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/03 17:09:58 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:43:16 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	error_exit(t_stack **stack_a, t_stack **stack_b)
+void	error_exit(t_stack *stack_a, t_stack *stack_b)
 {
 	if (stack_a != NULL)
-		free_stack(*stack_a);
+		free_stack(stack_a);
 	if (stack_b != NULL)
-		free_stack(*stack_b);
+		free_stack(stack_b);
 	write(2, "Error\n", 6);
 	exit(1);
 }
@@ -37,19 +37,19 @@ void	free_2d_array(char **array)
 	free(array);
 }
 
-void	add_numbers(t_stack **stack_a, char **nums)
+void	add_numbers(t_stack *stack_a, char **nums)
 {
 	int		i;
 
 	i = 0;
 	while (nums[i])
 	{
-		add_node(*stack_a, ft_atoi(nums[i]));
+		add_node(stack_a, ft_atoi(nums[i]));
 		i++;
 	}
 }
 
-void	parse_args(char **argv, t_stack **stack_a, t_stack **stack_b)
+void	parse_args(char **argv, t_stack *stack_a, t_stack *stack_b)
 {
 	char		**nums;
 
