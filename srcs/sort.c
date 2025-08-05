@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 22:20:15 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:31:01 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,9 +195,12 @@ void	sort_four(t_stack *a, t_stack *b)
 	}
 	else if (min_index == 3)
 		rra(a);
-	pb(a, b);
-	sort_three(a);
-	pa(a, b);
+	if (!is_sorted(a))
+	{
+		pb(a, b);
+		sort_three(a);
+		pa(a, b);
+	}
 }
 
 void	a_piece_of_cake(t_stack *a, t_stack *b)
