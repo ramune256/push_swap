@@ -1,40 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/03 17:15:00 by shunwata         ###   ########.fr       */
+/*   Created: 2025/04/28 01:27:13 by shunwata          #+#    #+#             */
+/*   Updated: 2025/06/04 20:49:59 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	push_swap_h
-# define push_swap_h
+#include "libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-
-typedef struct	s_node
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	int				value;
-	struct s_node	*next;
-}	t_node;
+	unsigned char		*d;
+	const unsigned char	*s;
+	size_t				i;
 
-typedef struct	s_stack
-{
-	t_node	*top;
-	int		size;
-}	t_stack;
-
-typedef struct	s_cost
-{
-	int		idx_a;
-	int		idx_b;
-	int		cost_a;
-	int		cost_b;
-	int		total;
-}	t_cost;
-
-#endif
+	if (!dst && !src)
+		return (NULL);
+	d = (unsigned char *)dst;
+	s = (const unsigned char *)src;
+	i = 0;
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dst);
+}
