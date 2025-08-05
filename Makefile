@@ -6,7 +6,7 @@
 #    By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/18 21:38:29 by shunwata          #+#    #+#              #
-#    Updated: 2025/08/05 17:41:20 by shunwata         ###   ########.fr        #
+#    Updated: 2025/08/05 17:49:32 by shunwata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,10 @@ NAME = push_swap
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I $(LIBFT_DIR)/includes -I $(FT_PRINTF_DIR) -I $(GET_NEXT_LINE_DIR)
 
-SRC = srcs/*.c
+SRC_DIR = srcs
+INC_DIR = includes
+
+SRC = $(SRC_DIR)/*.c
 OBJ = $(SRC:.c=.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
