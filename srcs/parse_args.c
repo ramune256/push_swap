@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:55:28 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/04 17:43:16 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:24:31 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	add_numbers(t_stack *stack_a, char **nums)
 	}
 }
 
-void	parse_args(char **argv, t_stack *stack_a, t_stack *stack_b)
+void	parse_args(int argc, char **argv, t_stack *stack_a, t_stack *stack_b)
 {
 	char		**nums;
 
-	if (ft_strchr(argv[1], ' '))
+	if (ft_strchr(argv[1], ' ') && argc == 2)
 	{
 		nums = ft_split(argv[1], ' ');
 		if (!nums)
