@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 12:33:15 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 21:03:56 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 21:17:13 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,6 @@ void	error_finder(char **nums, t_stack *stack_a, t_stack *stack_b)
 		}
 		i++;
 	}
+	if (i == 0)
+		error_exit(stack_a, stack_b);
 }
