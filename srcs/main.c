@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:51:05 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 22:22:18 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:27:07 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	main(int argc, char **argv)
 	{
 		free_stack(stack_a);
 		free_stack(stack_b);
+		return (0);
 	}
 	turk_sort(stack_a, stack_b);
 	free_stack(stack_a);
