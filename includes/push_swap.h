@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 20:22:17 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 19:47:39 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	rrr(t_stack *stack_a, t_stack *stack_b);
 void	error_exit(t_stack *stack_a, t_stack *stack_b);
 void	free_2d_array(char **array);
 void	add_numbers(t_stack *stack_a, char **nums);
-void	parse_args(int argc, char **argv, t_stack *stack_a, t_stack *stack_b);
+void	parse_args(char **argv, t_stack *stack_a, t_stack *stack_b);
 
 int		ft_abs(int n);
 int		value_of_node(int index, t_stack *stack);
