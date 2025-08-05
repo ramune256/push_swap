@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 22:55:28 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/04 17:43:16 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 21:27:46 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ void	add_numbers(t_stack *stack_a, char **nums)
 
 	i = 0;
 	while (nums[i])
-	{
-		add_node(stack_a, ft_atoi(nums[i]));
 		i++;
+	while (i > 0)
+	{
+		i--;
+		add_node(stack_a, ft_atoi(nums[i]));
 	}
 }
 
