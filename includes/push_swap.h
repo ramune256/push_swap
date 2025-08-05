@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 19:47:39 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:07:28 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,16 @@ void	parse_args(char **argv, t_stack *stack_a, t_stack *stack_b);
 
 int		ft_abs(int n);
 int		value_of_node(int index, t_stack *stack);
+int		is_sorted(t_stack *stack);
+int		find_min(t_stack *stack);
 int		find_insert_position(t_stack *stack, int to_insert, char stackname);
 void	get_better_way(t_cost *tmp);
 void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp);
 t_cost	best_move_to_b(t_stack *a, t_stack *b);
 t_cost	best_move_to_a(t_stack *a, t_stack *b);
 void	sort_three(t_stack *a);
-void	a_piece_of_cake(t_stack *a);
+void	sort_four(t_stack *a, t_stack *b);
+void	a_piece_of_cake(t_stack *a, t_stack *b);
 void	rotate_a(t_stack *a, t_cost *move);
 void	rotate_b(t_stack *b, t_cost *move);
 void	rotate_stacks(t_stack *a, t_stack *b, t_cost *move);

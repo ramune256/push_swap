@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/04 21:49:01 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:20:15 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,46 @@ int	value_of_node(int index, t_stack *stack)
 	while (index-- && current)
 		current = current->next;
 	return (current->value);
+}
+
+int	is_sorted(t_stack *stack)
+{
+	t_node	*current;
+
+	if (!stack->top || !stack->top->next)
+		return (1);
+	current = stack->top;
+	while (current->next)
+	{
+		if ((current->value) > (current->next->value))
+			return (0);
+		current = current->next;
+	}
+	return (1);
+}
+
+int	find_min(t_stack *stack)
+{
+	int		min_value;
+	int		min_index;
+	int		i;
+	t_node	*current;
+
+	min_value = stack->top->value;
+	min_index = 0;
+	i = 0;
+	current = stack->top;
+	while (i < stack->size)
+	{
+		if (current->value < min_value)
+		{
+			min_value = current->value;
+			min_index = i;
+		}
+		current = current->next;
+		i++;
+	}
+	return (min_index);
 }
 
 int	find_insert_position(t_stack *stack, int to_insert, char stackname)
@@ -141,12 +181,33 @@ void	sort_three(t_stack *a)
 		sa(a);
 }
 
-void	a_piece_of_cake(t_stack *a)
+void	sort_four(t_stack *a, t_stack *b)
 {
-	if (a->size == 2 && a->top->value > a->top->next->value)
+	int	min_index;
+
+	min_index = find_min(a);
+	if (min_index == 1)
+		ra(a);
+	else if (min_index == 2)
+	{
+		ra(a);
+		ra(a);
+	}
+	else if (min_index == 3)
+		rra(a);
+	pb(a, b);
+	sort_three(a);
+	pa(a, b);
+}
+
+void	a_piece_of_cake(t_stack *a, t_stack *b)
+{
+	if (a->size == 2 && (a->top->value) > (a->top->next->value))
 		sa(a);
 	else if (a->size == 3)
 		sort_three(a);
+	else if (a->size == 4)
+		sort_four(a, b);
 }
 
 void	rotate_a(t_stack *a, t_cost *move)
@@ -197,34 +258,18 @@ void	rotate_stacks(t_stack *a, t_stack *b, t_cost *move)
 
 void	finalize_stack(t_stack *a)
 {
-	int		min_idx;
-	int		i;
-	t_node	*cur;
-	int		min_val;
+	int	min_index;
 
-	min_idx = 0;
-	i = 0;
-	cur = a->top;
-	min_val = cur->value;
-	while (i < a->size)
+	min_index = find_min(a);
+	if (min_index <= a->size / 2)
 	{
-		if (cur->value < min_val)
-		{
-			min_val = cur->value;
-			min_idx = i;
-		}
-		cur = cur->next;
-		i++;
-	}
-	if (min_idx <= a->size / 2)
-	{
-		while (min_idx--)
+		while (min_index--)
 			ra(a);
 	}
 	else
 	{
-		min_idx = a->size - min_idx;
-		while (min_idx--)
+		min_index = a->size - min_index;
+		while (min_index--)
 			rra(a);
 	}
 }
@@ -233,9 +278,9 @@ void	turk_sort(t_stack *a, t_stack *b)
 {
 	t_cost	move;
 
-	if (a->size <= 3)
+	if (a->size <= 4)
 	{
-		a_piece_of_cake(a);
+		a_piece_of_cake(a, b);
 		return;
 	}
 	pb(a, b);

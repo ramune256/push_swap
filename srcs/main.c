@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:51:05 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/04 21:39:05 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:22:18 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,11 @@ int	main(int argc, char **argv)
 	if (!stack_b)
 		error_exit(stack_a, NULL);
 	parse_args(argv, stack_a, stack_b);
-
-	// // デバッグ用
-	// t_node		*tmp=stack_a->top;
-	// while (tmp)
-	// {
-	// 	ft_printf("d\n", tmp->value);
-	// 	tmp = tmp->next;
-	// }
-
+	if (is_sorted(stack_a))
+	{
+		free_stack(stack_a);
+		free_stack(stack_b);
+	}
 	turk_sort(stack_a, stack_b);
 	free_stack(stack_a);
 	free_stack(stack_b);
