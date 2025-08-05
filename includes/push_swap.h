@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 17:37:08 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 19:47:39 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,8 @@ void	rotate_b(t_stack *b, t_cost *move);
 void	rotate_stacks(t_stack *a, t_stack *b, t_cost *move);
 void	finalize_stack(t_stack *a);
 void	turk_sort(t_stack *a, t_stack *stack_b);
+
+t_stack	*init_stack(void);
+void	free_stack(t_stack *stack);
 
 #endif
