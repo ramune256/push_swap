@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 23:24:46 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 01:28:45 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	add_numbers(t_stack *stack_a, char **nums);
 void	parse_args(char **argv, t_stack *stack_a, t_stack *stack_b);
 
 int		ft_abs(int n);
-int		value_of_node(int index, t_stack *stack);
+t_node	*node_at(int index, t_stack *stack);
 int		is_sorted(t_stack *stack);
 int		find_min(t_stack *stack);
 int		find_max(t_stack *stack);

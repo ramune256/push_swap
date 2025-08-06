@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 23:25:40 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 01:37:28 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int	ft_abs(int n)
 	return (n);
 }
 
-int	value_of_node(int index, t_stack *stack)
+t_node	*node_at(int index, t_stack *stack)
 {
 	t_node	*current;
 
 	current = stack->top;
 	while (index-- && current)
 		current = current->next;
-	return (current->value);
+	return (current);
 }
 
 int	is_sorted(t_stack *stack)
@@ -159,10 +159,10 @@ t_cost	best_move_to_b(t_stack *a, t_stack *b)
 	while (i < a->size)
 	{
 		tmp.idx_a = i;
-		tmp.idx_b = find_insert_position(b, value_of_node(i, a), 'b');
+		tmp.idx_b = find_insert_position(b, node_at(i, a)->value, 'b');
 		get_rough_cost(a, b, &tmp);
 		get_better_way(&tmp);
-		if (tmp.total < best.total)
+		if (tmp.total < best.total && node_at(i, a)->lis_flag == 0)
 			best = tmp;
 		i++;
 	}
@@ -180,7 +180,7 @@ t_cost	best_move_to_a(t_stack *a, t_stack *b)
 	while (i < b->size)
 	{
 		tmp.idx_b = i;
-		tmp.idx_a = find_insert_position(a, value_of_node(i, b), 'a');
+		tmp.idx_a = find_insert_position(a, node_at(i, b)->value, 'a');
 		get_rough_cost(a, b, &tmp);
 		get_better_way(&tmp);
 		if (tmp.total < best.total)
@@ -418,23 +418,32 @@ int	lis_manage(int *nums, t_stack *a)
 void	turk_sort(t_stack *a, t_stack *b)
 {
 	t_cost	move;
+	int		*nums;
+	int		lis;
 
 	if (a->size <= 4)
 	{
 		a_piece_of_cake(a, b);
 		return;
 	}
-	pb(a, b);
-	pb(a, b);
-	if ((b->top->value) < (b->top->next->value))
-		sb(b);
-	while (a->size > 3)
+	nums = stack_to_int_array(a);
+	if (!nums)
+		error_exit(a, b);
+	lis = lis_manage(nums, a);
+	if (lis == -1)
+		error_exit(a, b);
+	// lisの回転を考慮するようにしたら以下が必要
+	// if (lis == a->size)
+	// {
+	// 	finalize_stack(a);
+	// 	return;
+	// }
+	while (a->size > lis)
 	{
 		move = best_move_to_b(a, b);
 		rotate_stacks(a, b, &move);
 		pb(a, b);
 	}
-	sort_three(a);
 	while (b->size > 0)
 	{
 		move = best_move_to_a(a, b);
