@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 15:51:41 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:16:07 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct	s_cost
 }	t_cost;
 
 int		is_valid_int(const char *str);
-int		is_positive(const char *str);
 int		is_numeric(const char *str);
 void	error_finder(char **nums, t_stack *stack_a, t_stack *stack_b);
 
