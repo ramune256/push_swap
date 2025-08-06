@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 22:07:28 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:51:41 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int		ft_abs(int n);
 int		value_of_node(int index, t_stack *stack);
 int		is_sorted(t_stack *stack);
 int		find_min(t_stack *stack);
+int		find_max(t_stack *stack);
 int		find_insert_position(t_stack *stack, int to_insert, char stackname);
 void	get_better_way(t_cost *tmp);
 void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp);

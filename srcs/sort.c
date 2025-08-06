@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 22:31:01 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:50:52 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,30 @@ int	find_min(t_stack *stack)
 	return (min_index);
 }
 
+int	find_max(t_stack *stack)
+{
+	int		max_value;
+	int		max_index;
+	int		i;
+	t_node	*current;
+
+	max_value = stack->top->value;
+	max_index = 0;
+	i = 0;
+	current = stack->top;
+	while (i < stack->size)
+	{
+		if (current->value > max_value)
+		{
+			max_value = current->value;
+			max_index = i;
+		}
+		current = current->next;
+		i++;
+	}
+	return (max_index);
+}
+
 int	find_insert_position(t_stack *stack, int to_insert, char stackname)
 {
 	int		i;
@@ -81,9 +105,8 @@ int	find_insert_position(t_stack *stack, int to_insert, char stackname)
 	current = stack->top;
 	while (i < stack->size)
 	{
-		if (current->next)
-			next = current->next;
-		else
+		next = current->next;
+		if (!next)
 			next = stack->top;
 		if (stackname == 'a' \
 				&& (current->value < to_insert) && (to_insert < next->value))
@@ -94,7 +117,10 @@ int	find_insert_position(t_stack *stack, int to_insert, char stackname)
 		current = next;
 		i++;
 	}
-	return (0);
+	if (stackname == 'a')
+		return (find_min(stack));
+	else
+		return (find_max(stack));
 }
 
 void	get_better_way(t_cost *tmp)
@@ -177,6 +203,8 @@ void	sort_three(t_stack *a)
 		ra(a);
 	else if (second > first && second > third)
 		rra(a);
+	first = a->top->value;
+	second = a->top->next->value;
 	if (first > second)
 		sa(a);
 }
@@ -195,12 +223,11 @@ void	sort_four(t_stack *a, t_stack *b)
 	}
 	else if (min_index == 3)
 		rra(a);
-	if (!is_sorted(a))
-	{
-		pb(a, b);
-		sort_three(a);
-		pa(a, b);
-	}
+	if (is_sorted(a))
+		return;
+	pb(a, b);
+	sort_three(a);
+	pa(a, b);
 }
 
 void	a_piece_of_cake(t_stack *a, t_stack *b)

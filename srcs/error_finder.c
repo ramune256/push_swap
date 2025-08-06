@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 12:33:15 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 21:17:13 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/05 22:34:26 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ void	error_finder(char **nums, t_stack *stack_a, t_stack *stack_b)
 		j = i + 1;
 		while (nums[j])
 		{
-			if (ft_strncmp(nums[i], nums[j], \
-					ft_strlen(nums[j])) == 0)
+			if (ft_strncmp(nums[i], nums[j], 10) == 0)
 				error_exit(stack_a, stack_b);
 			j++;
 		}
