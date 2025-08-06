@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 15:50:52 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/06 23:25:40 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,117 @@ void	finalize_stack(t_stack *a)
 		while (min_index--)
 			rra(a);
 	}
+}
+
+int	*stack_to_int_array(t_stack *a)
+{
+	int		*nums;
+	t_node	*current;
+	int		i;
+
+	nums = malloc(sizeof(int) * a->size);
+	if (!nums)
+		return (NULL);
+	current = a->top;
+	i = 0;
+	while (i < (a->size))
+	{
+		nums[i] = current->value;
+		current = current->next;
+		i++;
+	}
+	return (nums);
+}
+
+void	find_lis(int *nums, int *lis, int *prev, int size)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < size)
+	{
+		lis[i] = 1;
+		prev[i] = -1;
+		i++;
+	}
+	i = 1;
+	while (i < size)
+	{
+		j = 0;
+		while (j < i)
+		{
+			if (nums[i] > nums[j] && lis[i] < lis[j] + 1)
+			{
+				lis[i] = lis[j] + 1;
+				prev[i] = j;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+int	get_max_index(int *lis, int size)
+{
+	int	max_index;
+	int	i;
+
+	max_index = 0;
+	i = 1;
+	while (i < size)
+	{
+		if (lis[i] > lis[max_index])
+			max_index = i;
+		i++;
+	}
+	return (max_index);
+}
+
+void	mark_lis_flag(t_stack *a, int *prev, int max_index)
+{
+	t_node	*current;
+	int		i;
+	int		j;
+
+	current = a->top;
+	i = max_index;
+	while (i != -1)
+	{
+		current = a->top;
+		j = 0;
+		while (j < i)
+		{
+			current = current->next;
+			j++;
+		}
+		current->lis_flag = 1;
+		i = prev[i];
+	}
+}
+
+int	lis_manage(int *nums, t_stack *a)
+{
+	int		*lis;
+	int		*prev;
+	int		size;
+	int		max_len;
+	int		max_index;
+
+	size = a->size;
+	lis = malloc(sizeof(int) * size);
+	if (!lis)
+		return (-1);
+	prev = malloc(sizeof(int) * size);
+	if (!prev)
+		return (free(lis), -1);
+	find_lis(nums, lis, prev, size);
+	max_index = get_max_index(lis, size);
+	max_len = lis[max_index];
+	mark_lis_flag(a, prev, max_index);
+	free(lis);
+	free(prev);
+	return (max_len);
 }
 
 void	turk_sort(t_stack *a, t_stack *b)

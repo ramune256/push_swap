@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 16:16:07 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/06 23:24:46 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 typedef struct	s_node
 {
 	int				value;
+	int				lis_flag;
 	struct s_node	*next;
 }	t_node;
 
@@ -84,6 +85,11 @@ void	rotate_a(t_stack *a, t_cost *move);
 void	rotate_b(t_stack *b, t_cost *move);
 void	rotate_stacks(t_stack *a, t_stack *b, t_cost *move);
 void	finalize_stack(t_stack *a);
+int		*stack_to_int_array(t_stack *a);
+void	find_lis(int *nums, int *lis, int *prev, int size);
+int		get_max_index(int *lis, int size);
+void	mark_lis_flag(t_stack *a, int *prev, int max_index);
+int		lis_manage(int *nums, t_stack *a);
 void	turk_sort(t_stack *a, t_stack *stack_b);
 
 t_stack	*init_stack(void);

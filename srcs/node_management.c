@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/05 20:07:12 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:43:14 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	add_node(t_stack *stack, int value)
 		return;
 	}
 	new_node->value = value;
+	new_node->lis_flag = 0;
 	new_node->next = stack->top;
 	stack->top = new_node;
 	stack->size++;
