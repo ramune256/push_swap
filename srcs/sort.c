@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 19:51:51 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:41:41 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -438,11 +438,51 @@ int	lis_manage(int *nums, t_stack *a)
 	return (max_len);
 }
 
+// void	turk_sort(t_stack *a, t_stack *b)
+// {
+// 	t_cost	move;
+// 	int		*nums;
+// 	int		lis;
+
+// 	if (a->size <= 4)
+// 	{
+// 		a_piece_of_cake(a, b);
+// 		return;
+// 	}
+// 	nums = stack_to_int_array_2x(a);
+// 	if (!nums)
+// 		error_exit(a, b);
+// 	lis = lis_manage(nums, a);
+// 	if (lis == -1)
+// 		error_exit(a, b);
+// 	if (lis == a->size)
+// 	{
+// 		finalize_stack(a);
+// 		return;
+// 	}
+// 	while (a->size > lis && a->size > 4)
+// 	{
+// 		move = best_move_to_b(a, b);
+// 		rotate_stacks(a, b, &move);
+// 		pb(a, b);
+// 	}
+// 	if (a->size == 4)
+// 		sort_four(a, b);
+// 	while (b->size > 0)
+// 	{
+// 		move = best_move_to_a(a, b);
+// 		rotate_stacks(a, b, &move);
+// 		pa(a, b);
+// 	}
+// 	finalize_stack(a);
+// }
+
 void	turk_sort(t_stack *a, t_stack *b)
 {
 	t_cost	move;
 	int		*nums;
 	int		lis;
+	int		to_push;
 
 	if (a->size <= 4)
 	{
@@ -460,14 +500,14 @@ void	turk_sort(t_stack *a, t_stack *b)
 		finalize_stack(a);
 		return;
 	}
-	while (a->size > lis && a->size > 4)
+	to_push = a->size - lis;
+	while (to_push--)
 	{
-		move = best_move_to_b(a, b);
-		rotate_stacks(a, b, &move);
-		pb(a, b);
+		if (a->top->lis_flag == 0)
+			pb(a,b);
+		else
+			ra(a);
 	}
-	if (a->size == 4)
-		sort_four(a, b);
 	while (b->size > 0)
 	{
 		move = best_move_to_a(a, b);
