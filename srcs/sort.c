@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 19:46:45 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 19:51:51 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,7 +449,7 @@ void	turk_sort(t_stack *a, t_stack *b)
 		a_piece_of_cake(a, b);
 		return;
 	}
-	nums = stack_to_int_array(a);
+	nums = stack_to_int_array_2x(a);
 	if (!nums)
 		error_exit(a, b);
 	lis = lis_manage(nums, a);
