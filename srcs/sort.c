@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 20:41:41 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:52:59 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -483,6 +483,7 @@ void	turk_sort(t_stack *a, t_stack *b)
 	int		*nums;
 	int		lis;
 	int		to_push;
+	int		i;
 
 	if (a->size <= 4)
 	{
@@ -501,10 +502,13 @@ void	turk_sort(t_stack *a, t_stack *b)
 		return;
 	}
 	to_push = a->size - lis;
-	while (to_push--)
+	while (i < to_push)
 	{
 		if (a->top->lis_flag == 0)
+		{
 			pb(a,b);
+			i++;
+		}
 		else
 			ra(a);
 	}
