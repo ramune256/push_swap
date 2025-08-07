@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 21:55:08 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:37:58 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,116 @@ t_cost	best_move_to_a(t_stack *a, t_stack *b)
 		i++;
 	}
 	return (best);
+}
+t_node	*copy_node(t_node *original)
+{
+	t_node	*new_node;
+
+	new_node = (t_node *)malloc(sizeof(t_node));
+	if (!new_node)
+		return (NULL);
+	new_node->value = original->value;
+	new_node->lis_flag = original->lis_flag;
+	new_node->next = NULL;
+	return (new_node);
+}
+
+// スタック全体をディープコピーする関数
+t_stack	*copy_stack(t_stack *original)
+{
+	t_stack	*new_stack;
+	t_node	*original_curr;
+	t_node	*new_curr;
+	t_node	*new_head;
+
+	new_stack = (t_stack *)malloc(sizeof(t_stack));
+	if (!new_stack)
+		return (NULL);
+	new_stack->size = original->size;
+	if (original->top == NULL)
+	{
+		new_stack->top = NULL;
+		return (new_stack);
+	}
+	// 最初のノードをコピー
+	new_head = copy_node(original->top);
+	if (!new_head)
+	{
+		free(new_stack);
+		return (NULL);
+	}
+	new_stack->top = new_head;
+	new_curr = new_head;
+	original_curr = original->top->next;
+	// 残りのノードをコピーして繋げる
+	while (original_curr)
+	{
+		new_curr->next = copy_node(original_curr);
+		if (!new_curr->next)
+		{
+			free_stack(new_stack); // 失敗したら作成途中のスタックを解放
+			return (NULL);
+		}
+		new_curr = new_curr->next;
+		original_curr = original_curr->next;
+	}
+	return (new_stack);
+}
+
+t_cost	best_move_to_a_depth2(t_stack *a, t_stack *b)
+{
+	t_cost	candidate_first_move; // 評価対象の「初手」
+	t_cost	best_second_move;     // シミュレート後の「二手目」
+	t_cost	best_overall_first_move; // 最終的に返すべき「最善の初手」
+	t_stack	*a_sim; // シミュレーション用のAスタック
+	t_stack	*b_sim; // シミュレーション用のBスタック
+	int		min_combined_cost;
+	int		i;
+
+	min_combined_cost = 2147483647;
+	i = 0;
+	// Bスタックの全要素を「初手」の候補として試す
+	while (i < b->size)
+	{
+		// 1. 「初手」のコストを計算
+		candidate_first_move.idx_b = i;
+		candidate_first_move.idx_a = find_insert_position(a, node_at(i, b)->value, 'a');
+		get_rough_cost(a, b, &candidate_first_move);
+		get_better_way(&candidate_first_move);
+
+		// 2. シミュレーションのためにスタックをコピー
+		a_sim = copy_stack(a);
+		b_sim = copy_stack(b);
+		if (!a_sim || !b_sim)
+		{
+			free_stack(a_sim); // 片方が成功していても解放
+			free_stack(b_sim);
+			error_exit(a, b); // コピーに失敗したら致命的エラー
+		}
+
+		// 3. コピーしたスタック上で「初手」を実行
+		rotate_stacks(a_sim, b_sim, &candidate_first_move);
+		pa(a_sim, b_sim);
+
+		// 4. シミュレート後の状態で、最善の「二手目」のコストを計算
+		if (b_sim->size > 0)
+			best_second_move = best_move_to_a(a_sim, b_sim);
+		else
+			best_second_move.total = 0; // Bが空になったら二手目のコストは0
+
+		// 5. 2手の合計コストが最小か評価し、更新する
+		if (candidate_first_move.total + best_second_move.total < min_combined_cost)
+		{
+			min_combined_cost = candidate_first_move.total + best_second_move.total;
+			best_overall_first_move = candidate_first_move;
+		}
+
+		// 6. シミュレーションで使ったメモリを解放 (非常に重要)
+		free_stack(a_sim);
+		free_stack(b_sim);
+		i++;
+	}
+	return (best_overall_first_move);
 }
 
 void	sort_three(t_stack *a)
@@ -455,7 +565,7 @@ void	turk_sort(t_stack *a, t_stack *b)
 	}
 	while (b->size > 0)
 	{
-		move = best_move_to_a(a, b);
+		move = best_move_to_a_depth2(a, b);
 		rotate_stacks(a, b, &move);
 		pa(a, b);
 	}

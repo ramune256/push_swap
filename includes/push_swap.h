@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 21:34:37 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:37:44 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ int		find_insert_position(t_stack *stack, int to_insert, char stackname);
 void	get_better_way(t_cost *tmp);
 void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp);
 t_cost	best_move_to_a(t_stack *a, t_stack *b);
+t_node	*copy_node(t_node *original);
+t_stack	*copy_stack(t_stack *original);
+t_cost	best_move_to_a_depth2(t_stack *a, t_stack *b);
 void	sort_three(t_stack *a);
 void	sort_four(t_stack *a, t_stack *b);
 void	a_piece_of_cake(t_stack *a, t_stack *b);
