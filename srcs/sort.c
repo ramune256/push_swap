@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 20:52:59 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:56:40 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -502,6 +502,7 @@ void	turk_sort(t_stack *a, t_stack *b)
 		return;
 	}
 	to_push = a->size - lis;
+	i = 0;
 	while (i < to_push)
 	{
 		if (a->top->lis_flag == 0)
