@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 19:20:32 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 19:46:45 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ void	finalize_stack(t_stack *a)
 	}
 }
 
-int	*stack_to_int_array(t_stack *a)
+int	*stack_to_int_array_2x(t_stack *a)
 {
 	int		*nums;
 	t_node	*current;
@@ -411,6 +411,7 @@ int	get_best_rot(int *nums, int *lis, int * prev, int size)
 		}
 		i++;
 	}
+	return (best_rot);
 }
 
 int	lis_manage(int *nums, t_stack *a)
