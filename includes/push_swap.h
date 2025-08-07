@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 01:28:45 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:49:44 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	finalize_stack(t_stack *a);
 int		*stack_to_int_array(t_stack *a);
 void	find_lis(int *nums, int *lis, int *prev, int size);
 int		get_max_index(int *lis, int size);
-void	mark_lis_flag(t_stack *a, int *prev, int max_index);
+void	mark_lis_flag(t_stack *a, int *prev, int max_index, int best_rot);
 int		lis_manage(int *nums, t_stack *a);
 void	turk_sort(t_stack *a, t_stack *stack_b);
 

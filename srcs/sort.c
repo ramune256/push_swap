@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 17:18:03 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 19:20:32 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,16 +312,19 @@ int	*stack_to_int_array(t_stack *a)
 {
 	int		*nums;
 	t_node	*current;
+	int		size;
 	int		i;
 
-	nums = malloc(sizeof(int) * a->size);
+	size = a->size;
+	nums = malloc(sizeof(int) * size * 2);
 	if (!nums)
 		return (NULL);
 	current = a->top;
 	i = 0;
-	while (i < (a->size))
+	while (i < size)
 	{
 		nums[i] = current->value;
+		nums[i + size] = current->value;
 		current = current->next;
 		i++;
 	}
@@ -373,25 +376,40 @@ int	get_max_index(int *lis, int size)
 	return (max_index);
 }
 
-void	mark_lis_flag(t_stack *a, int *prev, int max_index)
+void	mark_lis_flag(t_stack *a, int *prev, int max_index, int best_rot)
 {
-	t_node	*current;
 	int		i;
-	int		j;
+	int		i_in_original;
 
-	current = a->top;
 	i = max_index;
 	while (i != -1)
 	{
-		current = a->top;
-		j = 0;
-		while (j < i)
-		{
-			current = current->next;
-			j++;
-		}
-		current->lis_flag = 1;
+		i_in_original = (i + best_rot) % a->size;
+		node_at(i_in_original, a)->lis_flag = 1;
 		i = prev[i];
+	}
+}
+
+int	get_best_rot(int *nums, int *lis, int * prev, int size)
+{
+	int		current_len;
+	int		best_len;
+	int		best_rot;
+	int		i;
+
+	best_len = 0;
+	best_rot = 0;
+	i = 0;
+	while (i < size)
+	{
+		find_lis(nums + i, lis, prev, size);
+		current_len = lis[get_max_index(lis, size)];
+		if (current_len > best_len)
+		{
+			best_len = current_len;
+			best_rot = i;
+		}
+		i++;
 	}
 }
 
@@ -399,21 +417,21 @@ int	lis_manage(int *nums, t_stack *a)
 {
 	int		*lis;
 	int		*prev;
-	int		size;
+	int		best_rot;
 	int		max_len;
 	int		max_index;
 
-	size = a->size;
-	lis = malloc(sizeof(int) * size);
+	lis = malloc(sizeof(int) * a->size);
 	if (!lis)
 		return (-1);
-	prev = malloc(sizeof(int) * size);
+	prev = malloc(sizeof(int) * a->size);
 	if (!prev)
 		return (free(lis), -1);
-	find_lis(nums, lis, prev, size);
-	max_index = get_max_index(lis, size);
+	best_rot = get_best_rot(nums, lis, prev, a->size);
+	find_lis(nums + best_rot, lis, prev, a->size);
+	max_index = get_max_index(lis, a->size);
 	max_len = lis[max_index];
-	mark_lis_flag(a, prev, max_index);
+	mark_lis_flag(a, prev, max_index, best_rot);
 	free(lis);
 	free(prev);
 	return (max_len);
@@ -436,12 +454,11 @@ void	turk_sort(t_stack *a, t_stack *b)
 	lis = lis_manage(nums, a);
 	if (lis == -1)
 		error_exit(a, b);
-	// lisの回転を考慮するようにしたら以下が必要
-	// if (lis == a->size)
-	// {
-	// 	finalize_stack(a);
-	// 	return;
-	// }
+	if (lis == a->size)
+	{
+		finalize_stack(a);
+		return;
+	}
 	while (a->size > lis && a->size > 4)
 	{
 		move = best_move_to_b(a, b);
