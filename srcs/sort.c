@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 22:37:58 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:46:57 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,58 +229,80 @@ t_stack	*copy_stack(t_stack *original)
 
 t_cost	best_move_to_a_depth2(t_stack *a, t_stack *b)
 {
-	t_cost	candidate_first_move; // 評価対象の「初手」
-	t_cost	best_second_move;     // シミュレート後の「二手目」
-	t_cost	best_overall_first_move; // 最終的に返すべき「最善の初手」
-	t_stack	*a_sim; // シミュレーション用のAスタック
-	t_stack	*b_sim; // シミュレーション用のBスタック
-	int		min_combined_cost;
+	t_cost	candidate_move; // 評価対象の「初手」
+	t_cost	best_move_so_far; // 最終的に返すべき「最善の初手」
+	t_stack	*a_sim;
+	t_stack	*b_sim;
+	int		min_eval_cost; // 評価用の最小コスト
 	int		i;
 
-	min_combined_cost = 2147483647;
+	min_eval_cost = 2147483647;
+	// best_move_so_far を最初の要素で初期化しておく
+	best_move_so_far.idx_b = 0;
+	best_move_so_far.idx_a = find_insert_position(a, node_at(0, b)->value, 'a');
+	get_rough_cost(a, b, &best_move_so_far);
+	get_better_way(&best_move_so_far);
+
 	i = 0;
-	// Bスタックの全要素を「初手」の候補として試す
 	while (i < b->size)
 	{
-		// 1. 「初手」のコストを計算
-		candidate_first_move.idx_b = i;
-		candidate_first_move.idx_a = find_insert_position(a, node_at(i, b)->value, 'a');
-		get_rough_cost(a, b, &candidate_first_move);
-		get_better_way(&candidate_first_move);
+		// 1. 「初手」の候補とそのコストを計算
+		candidate_move.idx_b = i;
+		candidate_move.idx_a = find_insert_position(a, node_at(i, b)->value, 'a');
+		get_rough_cost(a, b, &candidate_move);
+		get_better_way(&candidate_move);
 
-		// 2. シミュレーションのためにスタックをコピー
+		// 2. スタックをコピーしてシミュレーション
 		a_sim = copy_stack(a);
 		b_sim = copy_stack(b);
 		if (!a_sim || !b_sim)
 		{
-			free_stack(a_sim); // 片方が成功していても解放
+			free_stack(a_sim);
 			free_stack(b_sim);
-			error_exit(a, b); // コピーに失敗したら致命的エラー
+			error_exit(a, b);
 		}
 
 		// 3. コピーしたスタック上で「初手」を実行
-		rotate_stacks(a_sim, b_sim, &candidate_first_move);
+		rotate_stacks(a_sim, b_sim, &candidate_move);
 		pa(a_sim, b_sim);
 
-		// 4. シミュレート後の状態で、最善の「二手目」のコストを計算
+		// 4. シミュレート後の状態で、次の手のコストを計算
+		int second_move_cost;
 		if (b_sim->size > 0)
-			best_second_move = best_move_to_a(a_sim, b_sim);
-		else
-			best_second_move.total = 0; // Bが空になったら二手目のコストは0
-
-		// 5. 2手の合計コストが最小か評価し、更新する
-		if (candidate_first_move.total + best_second_move.total < min_combined_cost)
 		{
-			min_combined_cost = candidate_first_move.total + best_second_move.total;
-			best_overall_first_move = candidate_first_move;
+			// best_move_to_a はコストが最も低い「二手目」を返す
+			t_cost next_best_move = best_move_to_a(a_sim, b_sim);
+			second_move_cost = next_best_move.total;
+		}
+		else
+		{
+			second_move_cost = 0; // Bが空になったらコスト0
 		}
 
-		// 6. シミュレーションで使ったメモリを解放 (非常に重要)
+		// 5. 評価コストを計算し、最小なら更新
+		//    単純な合計ではなく、初手のコストを重視する
+		int eval_cost = candidate_move.total + second_move_cost;
+
+		// --- デバッグ用出力 ---
+		// printf("i=%d: val=%d, cost1=%d, cost2=%d, eval_cost=%d\n",
+		// 	i, node_at(i, b)->value, candidate_move.total, second_move_cost, eval_cost);
+
+		if (eval_cost < min_eval_cost)
+		{
+			min_eval_cost = eval_cost;
+			best_move_so_far = candidate_move;
+		}
+
+		// 6. メモリ解放
 		free_stack(a_sim);
 		free_stack(b_sim);
 		i++;
 	}
-	return (best_overall_first_move);
+
+	// printf("==> Chose move for val=%d (b_idx=%d), total_cost=%d\n\n",
+	// 	node_at(best_move_so_far.idx_b, b)->value, best_move_so_far.idx_b, best_move_so_far.total);
+
+	return (best_move_so_far);
 }
 
 void	sort_three(t_stack *a)
