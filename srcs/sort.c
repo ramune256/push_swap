@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 20:56:40 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 21:55:08 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,27 +150,6 @@ void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp)
 			tmp->cost_b = tmp->idx_b;
 		else
 			tmp->cost_b = tmp->idx_b - b->size;
-}
-
-t_cost	best_move_to_b(t_stack *a, t_stack *b)
-{
-	t_cost	best;
-	t_cost	tmp;
-	int		i;
-
-	best.total = 2147483647;
-	i = 0;
-	while (i < a->size)
-	{
-		tmp.idx_a = i;
-		tmp.idx_b = find_insert_position(b, node_at(i, a)->value, 'b');
-		get_rough_cost(a, b, &tmp);
-		get_better_way(&tmp);
-		if (tmp.total < best.total && node_at(i, a)->lis_flag == 0)
-			best = tmp;
-		i++;
-	}
-	return (best);
 }
 
 t_cost	best_move_to_a(t_stack *a, t_stack *b)
@@ -437,45 +416,6 @@ int	lis_manage(int *nums, t_stack *a)
 	free(prev);
 	return (max_len);
 }
-
-// void	turk_sort(t_stack *a, t_stack *b)
-// {
-// 	t_cost	move;
-// 	int		*nums;
-// 	int		lis;
-
-// 	if (a->size <= 4)
-// 	{
-// 		a_piece_of_cake(a, b);
-// 		return;
-// 	}
-// 	nums = stack_to_int_array_2x(a);
-// 	if (!nums)
-// 		error_exit(a, b);
-// 	lis = lis_manage(nums, a);
-// 	if (lis == -1)
-// 		error_exit(a, b);
-// 	if (lis == a->size)
-// 	{
-// 		finalize_stack(a);
-// 		return;
-// 	}
-// 	while (a->size > lis && a->size > 4)
-// 	{
-// 		move = best_move_to_b(a, b);
-// 		rotate_stacks(a, b, &move);
-// 		pb(a, b);
-// 	}
-// 	if (a->size == 4)
-// 		sort_four(a, b);
-// 	while (b->size > 0)
-// 	{
-// 		move = best_move_to_a(a, b);
-// 		rotate_stacks(a, b, &move);
-// 		pa(a, b);
-// 	}
-// 	finalize_stack(a);
-// }
 
 void	turk_sort(t_stack *a, t_stack *b)
 {
