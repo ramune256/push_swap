@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 01:37:28 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/07 17:18:03 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	find_min(t_stack *stack)
 	int		i;
 	t_node	*current;
 
+	if (stack->size == 0)
+		return (0);
 	min_value = stack->top->value;
 	min_index = 0;
 	i = 0;
@@ -78,6 +80,8 @@ int	find_max(t_stack *stack)
 	int		i;
 	t_node	*current;
 
+	if (stack->size == 0)
+		return (0);
 	max_value = stack->top->value;
 	max_index = 0;
 	i = 0;
@@ -438,12 +442,14 @@ void	turk_sort(t_stack *a, t_stack *b)
 	// 	finalize_stack(a);
 	// 	return;
 	// }
-	while (a->size > lis)
+	while (a->size > lis && a->size > 4)
 	{
 		move = best_move_to_b(a, b);
 		rotate_stacks(a, b, &move);
 		pb(a, b);
 	}
+	if (a->size == 4)
+		sort_four(a, b);
 	while (b->size > 0)
 	{
 		move = best_move_to_a(a, b);
