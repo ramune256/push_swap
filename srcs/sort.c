@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/08 20:07:53 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/08 20:12:25 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -570,7 +570,6 @@ void	push_back_to_a(t_stack *a, t_stack *b)
 void	my_sort(t_stack *a, t_stack *b)
 {
 	int		lis;
-	int		pivot;
 
 	if (a->size <= 5)
 	{
