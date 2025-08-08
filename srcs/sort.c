@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/09 01:41:28 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/09 01:48:32 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -793,6 +793,100 @@ int	get_best_rot_optimized(int *nums, int *lis, int *prev, int size)
 	return (best_rot);
 }
 
+// 超最適化されたLISアルゴリズム（500要素用）
+int	search_lis_500_optimized(t_stack *a, t_stack *b)
+{
+	int	*nums;
+	int	lis;
+
+	nums = stack_to_int_array_2x(a, b);
+	lis = lis_manage_500_optimized(nums, a);
+	free(nums);
+	if (lis == -1)
+		error_exit(a, b);
+	return (lis);
+}
+
+// 500要素用の超最適化されたLIS管理関数
+int	lis_manage_500_optimized(int *nums, t_stack *a)
+{
+	int		*lis;
+	int		*prev;
+	int		best_rot;
+	int		max_len;
+	int		max_index;
+
+	lis = malloc(sizeof(int) * a->size);
+	if (!lis)
+		return(-1);
+	prev = malloc(sizeof(int) * a->size);
+	if (!prev)
+		return(free(lis), -1);
+
+	// 500要素用の特別な最適化
+	best_rot = get_best_rot_500_optimized(nums, lis, prev, a->size);
+	find_lis(nums + best_rot, lis, prev, a->size);
+	max_index = get_max_index(lis, a->size);
+	max_len = lis[max_index];
+	mark_lis_flag(a, prev, max_index, best_rot);
+
+	free(lis);
+	free(prev);
+	return (max_len);
+}
+
+// 500要素用の超最適化された回転検索
+int	get_best_rot_500_optimized(int *nums, int *lis, int *prev, int size)
+{
+	int		current_len;
+	int		best_len;
+	int		best_rot;
+	int		i;
+	int		step;
+
+	best_len = 0;
+	best_rot = 0;
+	step = size / 16; // より粗い検索（16分割）
+	if (step < 1)
+		step = 1;
+
+	i = 0;
+	while (i < size)
+	{
+		find_lis(nums + i, lis, prev, size);
+		current_len = lis[get_max_index(lis, size)];
+		if (current_len > best_len)
+		{
+			best_len = current_len;
+			best_rot = i;
+		}
+		i += step;
+	}
+
+	// 最適な回転の周辺を細かく検索（より狭い範囲）
+	int	start = best_rot - step / 2;
+	int	end = best_rot + step / 2;
+	if (start < 0)
+		start = 0;
+	if (end > size)
+		end = size;
+
+	i = start;
+	while (i < end)
+	{
+		find_lis(nums + i, lis, prev, size);
+		current_len = lis[get_max_index(lis, size)];
+		if (current_len > best_len)
+		{
+			best_len = current_len;
+			best_rot = i;
+		}
+		i++;
+	}
+
+	return (best_rot);
+}
+
 // 最終的な最適化されたソート関数
 void	my_sort_final(t_stack *a, t_stack *b)
 {
@@ -823,8 +917,8 @@ void	my_sort_final(t_stack *a, t_stack *b)
 	}
 }
 
-// 超最適化されたソート関数（500要素用）
-void	my_sort_ultra_optimized(t_stack *a, t_stack *b)
+// 500要素用の超最適化アルゴリズム
+void	my_sort_500_optimized(t_stack *a, t_stack *b)
 {
 	if (a->size <= 5)
 	{
@@ -835,8 +929,8 @@ void	my_sort_ultra_optimized(t_stack *a, t_stack *b)
 	// 500要素用の特別な最適化
 	if (a->size == 500)
 	{
-		// より効率的なチャンクサイズ
-		chunk_sort_optimized(a, b, 15); // より小さなチャンク
+		// より効率的なチャンクサイズ（12に変更）
+		chunk_sort_500(a, b, 12);
 	}
 	else if (a->size <= 100)
 	{
@@ -844,33 +938,38 @@ void	my_sort_ultra_optimized(t_stack *a, t_stack *b)
 	}
 	else
 	{
-		int	lis = search_lis_optimized(a, b);
+		// 500要素用の超最適化されたLISを使用
+		int	lis = search_lis_500_optimized(a, b);
 		if (lis == a->size)
 		{
 			finalize_stack(a);
 			return;
 		}
 		push_non_lis_to_b_optimized(a, b, lis);
-		push_back_to_a_optimized(a, b);
+		push_back_to_a_500_optimized(a, b);
 		finalize_stack(a);
 	}
 }
 
-// 最適化されたチャンクソート
-void	chunk_sort_optimized(t_stack *a, t_stack *b, int chunk_size)
+// 500要素専用のチャンクソート
+void	chunk_sort_500(t_stack *a, t_stack *b, int chunk_size)
 {
 	int		pivot;
 	int		pushed;
 	int		rotations;
-	int		original_size;
+	int		smaller_pivot;
+	int		larger_pivot;
 
-	original_size = a->size;
 	while (a->size > 5)
 	{
-		// 現在のスタックAのサイズに基づいてピボットを計算
-		pivot = find_pivot(a);
+		// より効率的なピボット選択
+		pivot = find_optimized_pivot(a);
 		if (pivot == -1)
 			error_exit(a, b);
+
+		// 追加のピボットでより細かい分割
+		smaller_pivot = pivot * 0.7;
+		larger_pivot = pivot * 1.3;
 
 		pushed = 0;
 		rotations = 0;
@@ -885,8 +984,10 @@ void	chunk_sort_optimized(t_stack *a, t_stack *b, int chunk_size)
 				// より効率的なスタックB管理
 				if (b->size > 1)
 				{
-					if (b->top->value < pivot / 2)
+					if (b->top->value <= smaller_pivot)
 						rb(b);
+					else if (b->top->value > larger_pivot)
+						rrb(b);
 				}
 			}
 			else
@@ -906,19 +1007,29 @@ void	chunk_sort_optimized(t_stack *a, t_stack *b, int chunk_size)
 	}
 
 	a_piece_of_cake(a, b);
-	push_back_to_a_optimized(a, b);
+	push_back_to_a_500_optimized(a, b);
 }
 
-// より効率的なpush_back_to_a関数
-void	push_back_to_a_ultra_optimized(t_stack *a, t_stack *b)
+// 500要素用の最適化されたpush_back関数
+void	push_back_to_a_500_optimized(t_stack *a, t_stack *b)
 {
 	t_cost	move;
+	int		best_value;
+	int		consecutive_moves;
 
 	while (b->size > 0)
 	{
-		move = best_move_to_a(a, b);
-		rotate_stacks(a, b, &move);
-		pa(a, b);
+		// 連続した最適移動を計算（最大5回）
+		consecutive_moves = 0;
+		while (b->size > 0 && consecutive_moves < 5)
+		{
+			move = best_move_to_a(a, b);
+
+			// 同時回転の最適化
+			rotate_stacks(a, b, &move);
+			pa(a, b);
+			consecutive_moves++;
+		}
 	}
 }
 

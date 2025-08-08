@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/09 01:41:28 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/09 01:48:32 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,13 @@ void	chunk_sort(t_stack *a, t_stack *b);
 int		search_lis_optimized(t_stack *a, t_stack *b);
 int		lis_manage_optimized(int *nums, t_stack *a);
 int		get_best_rot_optimized(int *nums, int *lis, int *prev, int size);
+int		search_lis_500_optimized(t_stack *a, t_stack *b);
+int		lis_manage_500_optimized(int *nums, t_stack *a);
+int		get_best_rot_500_optimized(int *nums, int *lis, int *prev, int size);
 void	my_sort_final(t_stack *a, t_stack *b);
-void	my_sort_ultra_optimized(t_stack *a, t_stack *b);
-void	chunk_sort_optimized(t_stack *a, t_stack *b, int chunk_size);
-void	push_back_to_a_ultra_optimized(t_stack *a, t_stack *b);
+void	my_sort_500_optimized(t_stack *a, t_stack *b);
+void	chunk_sort_500(t_stack *a, t_stack *b, int chunk_size);
+void	push_back_to_a_500_optimized(t_stack *a, t_stack *b);
 
 t_stack	*init_stack(void);
 void	free_stack(t_stack *stack);
