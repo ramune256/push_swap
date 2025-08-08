@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/07 21:55:08 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:34:01 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,21 +195,48 @@ void	sort_three(t_stack *a)
 void	sort_four(t_stack *a, t_stack *b)
 {
 	int	min_index;
+	int	count;
 
 	min_index = find_min(a);
-	if (min_index == 1)
-		ra(a);
-	else if (min_index == 2)
+	if (min_index <= a->size / 2)
 	{
-		ra(a);
-		ra(a);
+		while (min_index--)
+			ra(a);
 	}
-	else if (min_index == 3)
-		rra(a);
+	else
+	{
+		count = a->size - min_index;
+		while (count--)
+			rra(a);
+	}
 	if (is_sorted(a))
 		return;
 	pb(a, b);
 	sort_three(a);
+	pa(a, b);
+}
+
+void	sort_five(t_stack *a, t_stack *b)
+{
+	int	min_index;
+	int	count;
+
+	min_index = find_min(a);
+	if (min_index <= a->size / 2)
+	{
+		while (min_index--)
+			ra(a);
+	}
+	else
+	{
+		count = a->size - min_index;
+		while (count--)
+			rra(a);
+	}
+	if (is_sorted(a))
+		return;
+	pb(a, b);
+	sort_four(a, b);
 	pa(a, b);
 }
 
@@ -221,6 +248,8 @@ void	a_piece_of_cake(t_stack *a, t_stack *b)
 		sort_three(a);
 	else if (a->size == 4)
 		sort_four(a, b);
+	else if (a->size == 5)
+		sort_five(a, b);
 }
 
 void	rotate_a(t_stack *a, t_cost *move)
@@ -425,7 +454,7 @@ void	turk_sort(t_stack *a, t_stack *b)
 	int		to_push;
 	int		i;
 
-	if (a->size <= 4)
+	if (a->size <= 5)
 	{
 		a_piece_of_cake(a, b);
 		return;
