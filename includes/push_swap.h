@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/09 01:30:30 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/09 01:41:28 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	push_non_lis_to_b_optimized(t_stack *a, t_stack *b, int lis);
 void	push_back_to_a_optimized(t_stack *a, t_stack *b);
 void	my_sort_optimized(t_stack *a, t_stack *b);
 void	chunk_sort(t_stack *a, t_stack *b);
-int		find_chunk_pivot(t_stack *a, int start, int end);
 int		search_lis_optimized(t_stack *a, t_stack *b);
 int		lis_manage_optimized(int *nums, t_stack *a);
 int		get_best_rot_optimized(int *nums, int *lis, int *prev, int size);
