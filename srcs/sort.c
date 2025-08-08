@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/08 20:12:25 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/09 01:30:43 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -530,6 +530,432 @@ int	find_pivot(t_stack *a)
 	pivot = quickselect(arr, 0, size - 1, size / 2);
 	free(arr);
 	return (pivot);
+}
+
+// 改善されたピボット選択関数
+int	find_optimized_pivot(t_stack *a)
+{
+	t_node	*current;
+	int		*arr;
+	int		size;
+	int		pivot;
+	int		i;
+
+	size = a->size;
+	arr = malloc(sizeof(int) * size);
+	if (!arr)
+		return (-1);
+	current = a->top;
+	i = 0;
+	while (i < size)
+	{
+		arr[i] = current->value;
+		current = current->next;
+		i++;
+	}
+	// より効率的なピボット選択（25%と75%の位置）
+	int	lower_pivot = quickselect(arr, 0, size - 1, size / 4);
+	int	upper_pivot = quickselect(arr, 0, size - 1, 3 * size / 4);
+	pivot = (lower_pivot + upper_pivot) / 2;
+	free(arr);
+	return (pivot);
+}
+
+// 改善されたpush_non_lis_to_b関数
+void	push_non_lis_to_b_optimized(t_stack *a, t_stack *b, int lis)
+{
+	int		pivot;
+	int		to_push;
+	int		smaller_count;
+	int		larger_count;
+
+	pivot = find_optimized_pivot(a);
+	if (pivot == -1)
+		error_exit(a, b);
+	to_push = a->size - lis;
+	smaller_count = 0;
+	larger_count = 0;
+
+	while (to_push > 0)
+	{
+		if (a->top->lis_flag == 0)
+		{
+			pb(a, b);
+			to_push--;
+			// より効率的なスタックBの管理
+			if (b->size > 1)
+			{
+				if (b->top->value <= pivot)
+				{
+					rb(b);
+					smaller_count++;
+				}
+				else
+					larger_count++;
+			}
+		}
+		else
+			ra(a);
+	}
+}
+
+// 改善されたpush_back_to_a関数
+void	push_back_to_a_optimized(t_stack *a, t_stack *b)
+{
+	t_cost	move;
+	int		best_value;
+	int		i;
+
+	while (b->size > 0)
+	{
+		// より効率的な最適移動の計算
+		move = best_move_to_a(a, b);
+
+		// 同時回転の最適化
+		rotate_stacks(a, b, &move);
+		pa(a, b);
+	}
+}
+
+// 新しい最適化されたソート関数
+void	my_sort_optimized(t_stack *a, t_stack *b)
+{
+	int		lis;
+
+	if (a->size <= 5)
+	{
+		a_piece_of_cake(a, b);
+		return;
+	}
+
+	lis = search_lis(a, b);
+	if (lis == a->size)
+	{
+		finalize_stack(a);
+		return;
+	}
+
+	// 改善された関数を使用
+	push_non_lis_to_b_optimized(a, b, lis);
+	push_back_to_a_optimized(a, b);
+	finalize_stack(a);
+}
+
+// チャンクソート用の関数
+void	chunk_sort(t_stack *a, t_stack *b)
+{
+	int		chunk_size;
+	int		chunk_start;
+	int		chunk_end;
+	int		pivot;
+	int		i;
+	int		pushed;
+
+	chunk_size = a->size / 4; // より小さなチャンクサイズ
+	if (chunk_size < 1)
+		chunk_size = 1;
+
+	chunk_start = 0;
+	while (a->size > 5)
+	{
+		chunk_end = chunk_start + chunk_size;
+		if (chunk_end > a->size)
+			chunk_end = a->size;
+
+		// チャンク内のピボットを見つける
+		pivot = find_chunk_pivot(a, chunk_start, chunk_end);
+
+		pushed = 0;
+		i = 0;
+		while (i < a->size && pushed < chunk_size)
+		{
+			if (a->top->value <= pivot)
+			{
+				pb(a, b);
+				pushed++;
+				// スタックBを効率的に管理
+				if (b->size > 1 && b->top->value < pivot)
+					rb(b);
+			}
+			else
+				ra(a);
+		}
+
+		chunk_start += chunk_size;
+	}
+
+	// 残りの要素をソート
+	a_piece_of_cake(a, b);
+
+	// スタックBからAに戻す
+	push_back_to_a_optimized(a, b);
+}
+
+// チャンク内のピボットを見つける関数
+int	find_chunk_pivot(t_stack *a, int start, int end)
+{
+	t_node	*current;
+	int		*arr;
+	int		size;
+	int		pivot;
+	int		i;
+
+	size = end - start;
+	arr = malloc(sizeof(int) * size);
+	if (!arr)
+		return (-1);
+
+	current = node_at(start, a);
+	i = 0;
+	while (i < size)
+	{
+		arr[i] = current->value;
+		current = current->next;
+		i++;
+	}
+
+	pivot = quickselect(arr, 0, size - 1, size / 2);
+	free(arr);
+	return (pivot);
+}
+
+// より効率的なLISアルゴリズム
+int	search_lis_optimized(t_stack *a, t_stack *b)
+{
+	int	*nums;
+	int	lis;
+
+	nums = stack_to_int_array_2x(a, b);
+	lis = lis_manage_optimized(nums, a);
+	free(nums);
+	if (lis == -1)
+		error_exit(a, b);
+	return (lis);
+}
+
+// 最適化されたLIS管理関数
+int	lis_manage_optimized(int *nums, t_stack *a)
+{
+	int		*lis;
+	int		*prev;
+	int		best_rot;
+	int		max_len;
+	int		max_index;
+
+	lis = malloc(sizeof(int) * a->size);
+	if (!lis)
+		return(-1);
+	prev = malloc(sizeof(int) * a->size);
+	if (!prev)
+		return(free(lis), -1);
+
+	// より効率的な回転検索
+	best_rot = get_best_rot_optimized(nums, lis, prev, a->size);
+	find_lis(nums + best_rot, lis, prev, a->size);
+	max_index = get_max_index(lis, a->size);
+	max_len = lis[max_index];
+	mark_lis_flag(a, prev, max_index, best_rot);
+
+	free(lis);
+	free(prev);
+	return (max_len);
+}
+
+// 最適化された回転検索
+int	get_best_rot_optimized(int *nums, int *lis, int *prev, int size)
+{
+	int		current_len;
+	int		best_len;
+	int		best_rot;
+	int		i;
+	int		step;
+
+	best_len = 0;
+	best_rot = 0;
+	step = size / 8; // より粗い検索
+	if (step < 1)
+		step = 1;
+
+	i = 0;
+	while (i < size)
+	{
+		find_lis(nums + i, lis, prev, size);
+		current_len = lis[get_max_index(lis, size)];
+		if (current_len > best_len)
+		{
+			best_len = current_len;
+			best_rot = i;
+		}
+		i += step;
+	}
+
+	// 最適な回転の周辺を細かく検索
+	int	start = best_rot - step;
+	int	end = best_rot + step;
+	if (start < 0)
+		start = 0;
+	if (end > size)
+		end = size;
+
+	i = start;
+	while (i < end)
+	{
+		find_lis(nums + i, lis, prev, size);
+		current_len = lis[get_max_index(lis, size)];
+		if (current_len > best_len)
+		{
+			best_len = current_len;
+			best_rot = i;
+		}
+		i++;
+	}
+
+	return (best_rot);
+}
+
+// 最終的な最適化されたソート関数
+void	my_sort_final(t_stack *a, t_stack *b)
+{
+	if (a->size <= 5)
+	{
+		a_piece_of_cake(a, b);
+		return;
+	}
+
+	// サイズに応じてアルゴリズムを選択
+	if (a->size <= 100)
+	{
+		// 小さなサイズではチャンクソートを使用
+		chunk_sort(a, b);
+	}
+	else
+	{
+		// 大きなサイズでは最適化されたLISを使用
+		int	lis = search_lis_optimized(a, b);
+		if (lis == a->size)
+		{
+			finalize_stack(a);
+			return;
+		}
+		push_non_lis_to_b_optimized(a, b, lis);
+		push_back_to_a_optimized(a, b);
+		finalize_stack(a);
+	}
+}
+
+// 超最適化されたソート関数（500要素用）
+void	my_sort_ultra_optimized(t_stack *a, t_stack *b)
+{
+	if (a->size <= 5)
+	{
+		a_piece_of_cake(a, b);
+		return;
+	}
+
+	// 500要素用の特別な最適化
+	if (a->size == 500)
+	{
+		// より効率的なチャンクサイズ
+		chunk_sort_optimized(a, b, 15); // より小さなチャンク
+	}
+	else if (a->size <= 100)
+	{
+		chunk_sort(a, b);
+	}
+	else
+	{
+		int	lis = search_lis_optimized(a, b);
+		if (lis == a->size)
+		{
+			finalize_stack(a);
+			return;
+		}
+		push_non_lis_to_b_optimized(a, b, lis);
+		push_back_to_a_optimized(a, b);
+		finalize_stack(a);
+	}
+}
+
+// 最適化されたチャンクソート
+void	chunk_sort_optimized(t_stack *a, t_stack *b, int chunk_size)
+{
+	int		chunk_start;
+	int		chunk_end;
+	int		pivot;
+	int		i;
+	int		pushed;
+	int		rotations;
+
+	chunk_start = 0;
+	while (a->size > 5)
+	{
+		chunk_end = chunk_start + chunk_size;
+		if (chunk_end > a->size)
+			chunk_end = a->size;
+
+		pivot = find_chunk_pivot(a, chunk_start, chunk_end);
+
+		pushed = 0;
+		rotations = 0;
+		i = 0;
+		while (i < a->size && pushed < chunk_size)
+		{
+			if (a->top->value <= pivot)
+			{
+				pb(a, b);
+				pushed++;
+				// より効率的なスタックB管理
+				if (b->size > 1)
+				{
+					if (b->top->value < pivot / 2)
+						rb(b);
+				}
+			}
+			else
+			{
+				ra(a);
+				rotations++;
+			}
+			i++;
+		}
+
+		// 回転を最適化
+		if (rotations > a->size / 2)
+		{
+			rotations = a->size - rotations;
+			while (rotations--)
+				rra(a);
+		}
+
+		chunk_start += chunk_size;
+	}
+
+	a_piece_of_cake(a, b);
+	push_back_to_a_optimized(a, b);
+}
+
+// より効率的なpush_back_to_a関数
+void	push_back_to_a_ultra_optimized(t_stack *a, t_stack *b)
+{
+	t_cost	move;
+	int		best_value;
+	int		i;
+	int		consecutive_moves;
+
+	while (b->size > 0)
+	{
+		// 連続した最適移動を計算
+		consecutive_moves = 0;
+		while (b->size > 0 && consecutive_moves < 3)
+		{
+			move = best_move_to_a(a, b);
+
+			// 同時回転の最適化
+			rotate_stacks(a, b, &move);
+			pa(a, b);
+			consecutive_moves++;
+		}
+	}
 }
 
 void	push_non_lis_to_b(t_stack *a, t_stack *b, int lis)

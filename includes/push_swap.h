@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/08 20:09:18 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/09 01:30:30 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,21 @@ int		find_pivot(t_stack *a);
 void	push_non_lis_to_b(t_stack *a, t_stack *b, int lis);
 void	push_back_to_a(t_stack *a, t_stack *b);
 void	my_sort(t_stack *a, t_stack *stack_b);
+
+// 最適化された関数のプロトタイプ
+int		find_optimized_pivot(t_stack *a);
+void	push_non_lis_to_b_optimized(t_stack *a, t_stack *b, int lis);
+void	push_back_to_a_optimized(t_stack *a, t_stack *b);
+void	my_sort_optimized(t_stack *a, t_stack *b);
+void	chunk_sort(t_stack *a, t_stack *b);
+int		find_chunk_pivot(t_stack *a, int start, int end);
+int		search_lis_optimized(t_stack *a, t_stack *b);
+int		lis_manage_optimized(int *nums, t_stack *a);
+int		get_best_rot_optimized(int *nums, int *lis, int *prev, int size);
+void	my_sort_final(t_stack *a, t_stack *b);
+void	my_sort_ultra_optimized(t_stack *a, t_stack *b);
+void	chunk_sort_optimized(t_stack *a, t_stack *b, int chunk_size);
+void	push_back_to_a_ultra_optimized(t_stack *a, t_stack *b);
 
 t_stack	*init_stack(void);
 void	free_stack(t_stack *stack);
