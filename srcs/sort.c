@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/08 18:34:01 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/08 20:07:53 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,7 +316,7 @@ void	finalize_stack(t_stack *a)
 	}
 }
 
-int	*stack_to_int_array_2x(t_stack *a)
+int	*stack_to_int_array_2x(t_stack *a, t_stack *b)
 {
 	int		*nums;
 	t_node	*current;
@@ -326,7 +326,7 @@ int	*stack_to_int_array_2x(t_stack *a)
 	size = a->size;
 	nums = malloc(sizeof(int) * size * 2);
 	if (!nums)
-		return (NULL);
+		error_exit(a, b);
 	current = a->top;
 	i = 0;
 	while (i < size)
@@ -432,10 +432,10 @@ int	lis_manage(int *nums, t_stack *a)
 
 	lis = malloc(sizeof(int) * a->size);
 	if (!lis)
-		return (-1);
+		return(-1);
 	prev = malloc(sizeof(int) * a->size);
 	if (!prev)
-		return (free(lis), -1);
+		return(free(lis), -1);
 	best_rot = get_best_rot(nums, lis, prev, a->size);
 	find_lis(nums + best_rot, lis, prev, a->size);
 	max_index = get_max_index(lis, a->size);
@@ -446,47 +446,144 @@ int	lis_manage(int *nums, t_stack *a)
 	return (max_len);
 }
 
-void	turk_sort(t_stack *a, t_stack *b)
+int	search_lis(t_stack *a, t_stack *b)
 {
-	t_cost	move;
-	int		*nums;
-	int		lis;
-	int		to_push;
-	int		i;
+	int	*nums;
+	int	lis;
 
-	if (a->size <= 5)
-	{
-		a_piece_of_cake(a, b);
-		return;
-	}
-	nums = stack_to_int_array_2x(a);
-	if (!nums)
-		error_exit(a, b);
+	nums = stack_to_int_array_2x(a, b);
 	lis = lis_manage(nums, a);
+	free(nums);
 	if (lis == -1)
 		error_exit(a, b);
-	if (lis == a->size)
+	return (lis);
+}
+
+void	swap_int(int *a, int *b)
+{
+	int	temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int	partition(int *arr, int low, int high)
+{
+	int	pivot_value;
+	int	i;
+	int	j;
+
+	pivot_value = arr[high];
+	i = low - 1;
+	j = low;
+	while (j < high)
 	{
-		finalize_stack(a);
-		return;
+		if (arr[j] < pivot_value)
+		{
+			i++;
+			swap_int(&arr[i], &arr[j]);
+		}
+		j++;
 	}
-	to_push = a->size - lis;
+	swap_int(&arr[i + 1], &arr[high]);
+	return (i + 1);
+}
+
+int	quickselect(int *arr, int low, int high, int k)
+{
+	int	pivot_index;
+
+	if (low <= high)
+	{
+		pivot_index = partition(arr, low, high);
+		if (pivot_index == k)
+			return (arr[pivot_index]);
+		else if (pivot_index > k)
+			return (quickselect(arr, low, pivot_index - 1, k));
+		else
+			return (quickselect(arr, pivot_index + 1, high, k));
+	}
+	return (-1);
+}
+
+int	find_pivot(t_stack *a)
+{
+	t_node	*current;
+	int		*arr;
+	int		size;
+	int		pivot;
+	int		i;
+
+	size = a->size;
+	arr = malloc(sizeof(int) * size);
+	if (!arr)
+		return (-1);
+	current = a->top;
 	i = 0;
-	while (i < to_push)
+	while (i < size)
+	{
+		arr[i] = current->value;
+		current = current->next;
+		i++;
+	}
+	pivot = quickselect(arr, 0, size - 1, size / 2);
+	free(arr);
+	return (pivot);
+}
+
+void	push_non_lis_to_b(t_stack *a, t_stack *b, int lis)
+{
+	int	pivot;
+	int	to_push;
+
+	pivot = find_pivot(a);
+	if (pivot == -1)
+		error_exit(a, b);
+	to_push = a->size - lis;
+	while (to_push > 0)
 	{
 		if (a->top->lis_flag == 0)
 		{
-			pb(a,b);
-			i++;
+			pb(a, b);
+			to_push--;
+			if (b->top->value <= pivot && b->size > 1)
+				rb(b);
 		}
 		else
 			ra(a);
 	}
+}
+
+void	push_back_to_a(t_stack *a, t_stack *b)
+{
+	t_cost	move;
+
 	while (b->size > 0)
 	{
 		move = best_move_to_a(a, b);
 		rotate_stacks(a, b, &move);
 		pa(a, b);
 	}
+}
+
+void	my_sort(t_stack *a, t_stack *b)
+{
+	int		lis;
+	int		pivot;
+
+	if (a->size <= 5)
+	{
+		a_piece_of_cake(a, b);
+		return;
+	}
+	lis = search_lis(a, b);
+	if (lis == a->size)
+	{
+		finalize_stack(a);
+		return;
+	}
+	push_non_lis_to_b(a, b, lis);
+	push_back_to_a(a, b);
 	finalize_stack(a);
 }

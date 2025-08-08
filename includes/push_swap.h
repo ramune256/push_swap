@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/08 18:25:22 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/08 20:09:18 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,20 @@ void	rotate_a(t_stack *a, t_cost *move);
 void	rotate_b(t_stack *b, t_cost *move);
 void	rotate_stacks(t_stack *a, t_stack *b, t_cost *move);
 void	finalize_stack(t_stack *a);
-int		*stack_to_int_array_2x(t_stack *a);
+int		*stack_to_int_array_2x(t_stack *a, t_stack *b);
 void	find_lis(int *nums, int *lis, int *prev, int size);
 int		get_max_index(int *lis, int size);
 void	mark_lis_flag(t_stack *a, int *prev, int max_index, int best_rot);
 int		get_best_rot(int *nums, int *lis, int * prev, int size);
 int		lis_manage(int *nums, t_stack *a);
-void	turk_sort(t_stack *a, t_stack *stack_b);
+int		search_lis(t_stack *a, t_stack *b);
+void	swap_int(int *a, int *b);
+int		partition(int *arr, int low, int high);
+int		quickselect(int *arr, int low, int high, int k);
+int		find_pivot(t_stack *a);
+void	push_non_lis_to_b(t_stack *a, t_stack *b, int lis);
+void	push_back_to_a(t_stack *a, t_stack *b);
+void	my_sort(t_stack *a, t_stack *stack_b);
 
 t_stack	*init_stack(void);
 void	free_stack(t_stack *stack);
