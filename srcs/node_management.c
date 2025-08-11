@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 19:43:14 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:13:48 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	add_node(t_stack *stack, int value)
 	if (!new_node)
 	{
 		write(2, "Error\n", 6);
-		return;
+		return ;
 	}
 	new_node->value = value;
 	new_node->lis_flag = 0;
@@ -52,7 +52,7 @@ void	swap(t_stack *stack)
 	int	second;
 
 	if (stack->size < 2)
-		return;
+		return ;
 	first = del_node(stack);
 	second = del_node(stack);
 	add_node(stack, first);
@@ -65,7 +65,7 @@ void	rotate(t_stack *stack)
 	t_node	*tail;
 
 	if (stack->size < 2)
-		return;
+		return ;
 	old_top = stack->top;
 	stack->top = stack->top->next;
 	old_top->next = NULL;
@@ -81,7 +81,7 @@ void	reverse_rotate(t_stack *stack)
 	t_node	*prev;
 
 	if (stack->size < 2)
-		return;
+		return ;
 	tail = stack->top;
 	while (tail->next)
 	{

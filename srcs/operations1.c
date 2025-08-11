@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 13:00:44 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/03 17:06:13 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:14:23 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	pa(t_stack *stack_a, t_stack *stack_b)
 	int		value;
 
 	if (stack_b->size == 0)
-		return;
+		return ;
 	value = del_node(stack_b);
 	add_node(stack_a, value);
 	write(1, "pa\n", 3);
@@ -47,7 +47,7 @@ void	pb(t_stack *stack_a, t_stack *stack_b)
 	int		value;
 
 	if (stack_a->size == 0)
-		return;
+		return ;
 	value = del_node(stack_a);
 	add_node(stack_b, value);
 	write(1, "pb\n", 3);

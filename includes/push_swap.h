@@ -6,31 +6,31 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 12:54:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/11 17:10:46 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:10:52 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	push_swap_h
-# define push_swap_h
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
 # include <stdlib.h>
 # include <unistd.h>
 # include "libft.h"
 
-typedef struct	s_node
+typedef struct s_node
 {
 	int				value;
 	int				lis_flag;
 	struct s_node	*next;
 }	t_node;
 
-typedef struct	s_stack
+typedef struct s_stack
 {
 	t_node	*top;
 	int		size;
 }	t_stack;
 
-typedef struct	s_cost
+typedef struct s_cost
 {
 	int		idx_a;
 	int		idx_b;
@@ -89,7 +89,7 @@ int		*stack_to_int_array_2x(t_stack *a, t_stack *b);
 void	find_lis(int *nums, int *lis, int *prev, int size);
 int		get_max_index(int *lis, int size);
 void	mark_lis_flag(t_stack *a, int *prev, int max_index, int best_rot);
-int		get_best_rot(int *nums, int *lis, int * prev, int size);
+int		get_best_rot(int *nums, int *lis, int *prev, int size);
 int		lis_manage(int *nums, t_stack *a);
 int		search_lis(t_stack *a, t_stack *b);
 void	swap_int(int *a, int *b);

@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 16:43:10 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/11 17:03:07 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:17:38 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	sort_five(t_stack *a, t_stack *b)
 			rra(a);
 	}
 	if (is_sorted(a))
-		return;
+		return ;
 	pb(a, b);
 	sort_four(a, b);
 	pa(a, b);
@@ -54,7 +54,7 @@ void	sort_four(t_stack *a, t_stack *b)
 			rra(a);
 	}
 	if (is_sorted(a))
-		return;
+		return ;
 	pb(a, b);
 	sort_three(a);
 	pa(a, b);

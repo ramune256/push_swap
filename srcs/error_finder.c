@@ -6,13 +6,13 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 12:33:15 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/06 16:16:43 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:18:30 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	is_vaild_int(const char *str)
+int	is_valid_int(const char *str)
 {
 	int		len;
 
@@ -58,7 +58,7 @@ void	error_finder(char **nums, t_stack *stack_a, t_stack *stack_b)
 	while (nums[i])
 	{
 		if (!(is_numeric(nums[i]) && \
-				is_vaild_int(nums[i]) &&\
+				is_valid_int(nums[i]) && \
 				ft_strlen(nums[i])))
 			error_exit(stack_a, stack_b);
 		j = i + 1;

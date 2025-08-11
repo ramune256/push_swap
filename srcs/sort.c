@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 16:41:52 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/11 16:58:08 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:14:58 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ void	my_sort(t_stack *a, t_stack *b)
 	if (a->size <= 5)
 	{
 		a_piece_of_cake(a, b);
-		return;
+		return ;
 	}
 	lis = search_lis(a, b);
 	if (lis == a->size)
 	{
 		finalize_stack(a);
-		return;
+		return ;
 	}
 	push_non_lis_to_b(a, b, lis);
 	push_back_to_a(a, b);

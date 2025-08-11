@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 16:57:40 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/11 17:01:10 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:17:20 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	get_better_way(t_cost *tmp)
 
 void	get_rough_cost(t_stack *a, t_stack *b, t_cost *tmp)
 {
-		if (tmp->idx_a <= a->size / 2)
-			tmp->cost_a = tmp->idx_a;
-		else
-			tmp->cost_a = tmp->idx_a - a->size;
-		if (tmp->idx_b <= b->size / 2)
-			tmp->cost_b = tmp->idx_b;
-		else
-			tmp->cost_b = tmp->idx_b - b->size;
+	if (tmp->idx_a <= a->size / 2)
+		tmp->cost_a = tmp->idx_a;
+	else
+		tmp->cost_a = tmp->idx_a - a->size;
+	if (tmp->idx_b <= b->size / 2)
+		tmp->cost_b = tmp->idx_b;
+	else
+		tmp->cost_b = tmp->idx_b - b->size;
 }
 
 int	find_insert_position(t_stack *stack, int to_insert, char stackname)

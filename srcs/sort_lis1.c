@@ -6,7 +6,7 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 16:44:50 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/11 17:00:07 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:16:54 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	find_lis(int *nums, int *lis, int *prev, int size)
 	}
 }
 
-int	get_best_rot(int *nums, int *lis, int * prev, int size)
+int	get_best_rot(int *nums, int *lis, int *prev, int size)
 {
 	int		current_len;
 	int		best_len;
@@ -105,10 +105,10 @@ int	lis_manage(int *nums, t_stack *a)
 
 	lis = malloc(sizeof(int) * a->size);
 	if (!lis)
-		return(-1);
+		return (-1);
 	prev = malloc(sizeof(int) * a->size);
 	if (!prev)
-		return(free(lis), -1);
+		return (free(lis), -1);
 	best_rot = get_best_rot(nums, lis, prev, a->size);
 	find_lis(nums + best_rot, lis, prev, a->size);
 	max_index = get_max_index(lis, a->size);
