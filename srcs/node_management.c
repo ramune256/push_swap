@@ -6,11 +6,9 @@
 /*   By: shunwata <shunwata@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:16:42 by shunwata          #+#    #+#             */
-/*   Updated: 2025/08/11 20:13:48 by shunwata         ###   ########.fr       */
+/*   Updated: 2025/08/14 19:27:43 by shunwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "push_swap.h"
 
 #include "push_swap.h"
 
